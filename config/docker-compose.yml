@@ -1,0 +1,19 @@
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../config/Dockerfile.frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ../frontend:/usr/app
+      - /usr/app/node_modules
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../config/Dockerfile.backend
+    ports:
+      - 1337:1337
+    volumes:
+      - ../backend:/usr/app
+      - /usr/app/node_modules   
