@@ -7,7 +7,8 @@ services:
       - 3000:3000
     volumes:
       - ../frontend:/usr/app
-      - /usr/app/node_modules
+    networks:
+      - strapi 
   backend:
     build:
       context: ../backend
@@ -16,4 +17,37 @@ services:
       - 1337:1337
     volumes:
       - ../backend:/usr/app
-      - /usr/app/node_modules   
+    environment:
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_HOST: db
+      DATABASE_CLIENT: postgres
+      DATABASE_PORT: 5432
+      DATABASE_SSL: false
+      NODE_ENV: ${NODE_ENV}
+
+    networks:
+      - strapi      
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_NAME: ${DATABASE_NAME}
+    volumes:
+      - db:/var/lib/postgresql/data
+    networks:
+        - strapi  
+networks:
+  strapi:
+volumes:
+  db:       

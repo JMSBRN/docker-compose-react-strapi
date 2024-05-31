@@ -1,10 +1,10 @@
-FROM node:18
+FROM node:20.11.1
 
 WORKDIR /usr/app
 
 COPY package*.json ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
